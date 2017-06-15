@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Todo App</title>
+</head>
+<body>
+
+	<form action="/add" method="POST">
+
+		<input type="text" name="task" />
+
+		<br>
+		<label><input type="checkbox" name="Imp" value="false">Important</label><br>
+		<label><input type="checkbox" name="Urg" value="false">Urgent</label>
+		<br>
+
+		<input type="submit" value="Add Task" />
+
+
+	</form>
+
+	<h3>Color Codes : </h3>
+	<h4 class="imp_urg">Important and Urgent</h4><br>
+	<h4 class="imp">Important</h4><br>
+	<h4 class="urg">Urgent</h4><br>
+	<h4 class="none">Just needs to be done</h4><br>
+
+
+	<ul>
+
+
+		<% tasks.each do |todo| %>
+
+
+		<% if todo.done %>
+		<li class="strikethrough"> 
+
+				<% if todo.impo==true && todo.urge==true %>
+					<h4 class="imp_urg_d"><%= todo.task %><h4>
+				<% elsif todo.impo==true && todo.urge==false %>
+					<h4 class="imp_d"><%= todo.task %><h4>
+				<% elsif todo.impo==false && todo.urge==true %>
+					<h4 class="urg_d"><%= todo.task %><h4>
+				<% elsif todo.impo==false && todo.urge==false %>
+					<h4 class="none_d"><%= todo.task %><h4>
+				<% end%>
+
+			<% else %>
+			<li>
+
+				<% if todo.impo==true && todo.urge==true %>
+					<h4 class="imp_urg"><%= todo.task %><h4>
+				<% elsif todo.impo==true && todo.urge==false %>
+					<h4 class="imp"><%= todo.task %><h4>
+				<% elsif todo.impo==false && todo.urge==true %>
+					<h4 class="urg"><%= todo.task %><h4>
+				<% elsif todo.impo==false && todo.urge==false %>
+					<h4 class="none"><%= todo.task %><h4>
+				<% end%>
+			<% end %>
+				, 
+				<form action="/done" method="POST">
+
+					<input type="hidden" name="task" value="<%= todo.task %>">
+					<% if todo.done %>
+
+					<input type="submit" value="UnDone">
+					<% else %>
+					<input type="submit" value="Done">
+					<% end %>
+				</form>
+
+			</li>
+
+			<% end %>
+
+		</ul>
+
+		<style type="text/css">
+			.strikethrough {
+				text-decoration: line-through;
+			}	
+			.none{
+    			display:inline;
+    			background-color:green;
+    			color:#000066;
+			}
+			.none_d{
+    			display:inline;
+    			background-color:white;
+    			color:#000;
+			}
+			.imp{
+    			display:inline;
+    			background-color:yellow;
+    			color:#000066;
+			}
+			.imp_d{
+    			display:inline;
+    			background-color:white;
+    			color:#000;
+			}
+			.urg{
+    			display:inline;
+    			background-color:orange;
+    			color:#000066;
+			}
+			.urg_d{
+    			display:inline;
+    			background-color:white;
+    			color:#000;
+			}
+			.imp_urg{
+    			display:inline;
+    			background-color:red;
+    			color:#000066;
+			}
+			.imp_urg_d{
+    			display:inline;
+    			background-color:white;
+    			color:#000;
+			}
+		</style>
+
+
+
+	</body>
+	</html>
