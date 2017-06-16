@@ -46,6 +46,16 @@ post '/add' do
   return redirect '/'
 end
 
+post '/del' do
+	task = params["task"]
+	tasks.each do |todo|
+		if todo.task == task
+			tasks.delete(todo)
+		end
+	end
+	return redirect '/'
+end
+
 post '/done' do
 	task = params["task"]
 
