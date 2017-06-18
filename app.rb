@@ -1,6 +1,6 @@
 require 'sinatra'
 require 'data_mapper'
-DataMapper.setup(:default, 'sqlite:////home/thedreamsaver/RubyWkspc/todoapp/project.db')
+DataMapper.setup(:default, 'sqlite:///'+Dir.pwd+'/project.db')
 
 class Todo
 	include DataMapper::Resource
@@ -21,7 +21,7 @@ class Todo
 end
 
 DataMapper.finalize # We are telling data mapper, that we are done, defining tables
-
+DataMapper.auto_upgrade!
 # tasks = []
 
 # t1 = Todo.new "First"
