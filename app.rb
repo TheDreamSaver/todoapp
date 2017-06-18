@@ -1,16 +1,28 @@
 require 'sinatra'
+require 'data_mapper'
+DataMapper.setup(:default, 'sqlite:////home/thedreamsaver/RubyWkspc/todoapp/project.db')
 
 class Todo
-	attr_accessor :task, :done, :impo, :urge
-	def initialize task
-		@task = task
-		@done = false
-		@impo = false
-		@urge = false
-	end
+	include DataMapper::Resource
+
+	property :id, 			Serial
+	property :task, 		String
+	property :done,			Boolean, :default => false
+	property :impo, 		Boolean, :default => false
+	property :urge, 		Boolean, :default => false
+	
+	# def initialize task
+		
+	# @task = task
+	# 	@done = false
+	# 	@impo = false
+	# 	@urge = false
+	# end
 end
 
-tasks = []
+DataMapper.finalize # We are telling data mapper, that we are done, defining tables
+
+# tasks = []
 
 # t1 = Todo.new "First"
 # t2 = Todo.new "Second"
@@ -22,15 +34,17 @@ tasks = []
 
 get '/' do
 	data = Hash.new
-	data[:tasks] = tasks
+	data[:tasks] = Todo.all
 	erb :index, locals: data
 end
 
 post '/add' do
   puts params
   task = params["task"]
-  todo = Todo.new task
-  
+  todo = Todo.new
+  todo.task = task
+  todo.done = false
+
   if params.has_key? "Imp" 
   	imp = params["Imp"]
   	todo.impo = true
@@ -41,29 +55,39 @@ post '/add' do
   	todo.urge = true
   end
   
-  tasks << todo
+  todo.save
+  # tasks << todo
   puts params
   return redirect '/'
 end
 
 post '/del' do
-	task = params["task"]
-	tasks.each do |todo|
-		if todo.task == task
-			tasks.delete(todo)
-		end
-	end
+	task_id = params["id"].to_i
+	todo = Todo.get(task_id)
+	todo.destroy
+
+	# task = params["task"]
+	# tasks.each do |todo|
+	# 	if todo.task == task
+	# 		tasks.delete(todo)
+	# 	end
+	# end
 	return redirect '/'
 end
 
 post '/done' do
-	task = params["task"]
+	task_id = params["id"].to_i
+	todo = Todo.get(task_id)
+	todo.done = !todo.done
+	todo.save
 
-	tasks.each do |todo|
-		if todo.task == task
-			todo.done = !todo.done
-		end
-	end
+	# task = params["task"]
+
+	# tasks.each do |todo|
+	# 	if todo.task == task
+	# 		todo.done = !todo.done
+	# 	end
+	# end
 
 	return redirect '/'
 end

@@ -61,7 +61,7 @@
 				, 
 				<form action="/done" method="POST">
 
-					<input type="hidden" name="task" value="<%= todo.task %>">
+					<input type="hidden" name="id" value="<%= todo.id %>">
 					<% if todo.done %>
 
 					<input type="submit" value="UnDone">
@@ -71,7 +71,7 @@
 				</form>
 				<form action="/del" method="POST">
 
-					<input type="hidden" name="task" value="<%= todo.task %>">
+					<input type="hidden" name="id" value="<%= todo.id %>">
 					<% if todo.done %>
 					<input type="submit" value="Delete">
 					<% end %>
